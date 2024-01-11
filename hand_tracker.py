@@ -10,7 +10,7 @@ import time
 confidence = float
 webcam_image = np.ndarray
 rgb_tuple = tuple[int, int, int]
-# coords_vector
+coords_vector = int
 
 
 # Classe =========================
@@ -51,9 +51,9 @@ class Detector:
         # Coletar resultados do processo das hands e analisar
         self.results = self.hands.process(img_RGB)
 
-        if self.results.multi_hand_landmarks and draw_hands:
+        """ if self.results.multi_hand_landmarks and draw_hands:
             for hand in self.results.multi_hand_landmarks:
-                self.mp_draw.draw_landmarks(img, hand, self.mp_hands.HAND_CONNECTIONS)
+                self.mp_draw.draw_landmarks(img, hand, self.mp_hands.HAND_CONNECTIONS) """
         
         return img
     
@@ -74,6 +74,21 @@ class Detector:
                 self.required_landmark_list.append([id, center_x, center_y])
 
         return self.required_landmark_list
+    
+    def draw_in_position(self,
+                         img: webcam_image,
+                         x_vector: coords_vector,
+                         y_vector: coords_vector,
+                         rgb_selection: tuple = (255,0,0),
+                         thickness: int = 10):
+        x_vector = x_vector if type(x_vector) == list else [x_vector]
+        y_vector = y_vector if type(y_vector) == list else [y_vector]
+
+        for x, y in zip(x_vector, y_vector):
+            cv2.circle(img, (x,y), thickness, rgb_selection, cv2.FILLED)
+        
+        return img
+
 
 
 
